@@ -9,7 +9,8 @@ const cors = require('cors');
 
 const rutasInicio = {
 	registroPaciente: require('./src/routes/inicio/registroPaciente.router'),
-	login: require('./src/routes/inicio/login.router')
+	login: require('./src/routes/inicio/login.router'),
+	admin: require('./src/routes/admin/admin.routes')
 };
 
 const app = express();
@@ -37,6 +38,7 @@ const api = '/api/'
 
 app.use(api + 'inicio/', rutasInicio.registroPaciente);
 app.use(api + 'inicio/', rutasInicio.login);
+app.use(api + 'admins/', rutasInicio.admin)
 
 const PORT = 4300 || 5000;
 
