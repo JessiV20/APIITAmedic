@@ -1,11 +1,17 @@
+require('dotenv').config({ path: './src/.env' });
 const mysql = require('mysql2');
 
+
+console.log('DB_USER:', process.env.DB_USER); 
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+
 const pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password:'123',
-    port: 3306,
-    database: 'itamedic'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME
 }).promise();
 
 module.exports = pool;
+ 
