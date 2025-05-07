@@ -12,6 +12,9 @@ const rutasInicio = {
 	login: require('./src/routes/inicio/login.router'),
 	admin: require('./src/routes/admin/admin.routes')
 };
+rutasPaciente = {
+	paciente: require('./src/routes/paciente/paciente.routes')
+};
 
 const app = express();
 
@@ -39,6 +42,7 @@ const api = '/api/'
 app.use(api + 'inicio/', rutasInicio.registroPaciente);
 app.use(api + 'inicio/', rutasInicio.login);
 app.use(api + 'admins/', rutasInicio.admin)
+app.use(api + 'paciente/', rutasPaciente.paciente);
 
 const PORT = 4300 || 5000;
 
