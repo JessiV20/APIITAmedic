@@ -93,5 +93,43 @@ console.log('Medico elegido',idElegido);
         return res.status(500).send({ error: error.message || 'Hubo un problema con la base de datos' });
     }
 });
+rutas.put('/cancelarCita', async (req, res) => {
+    console.log('🟢 Ruta /cancelarCita fue llamada');
+    const datos = req.body.datos;
+    console.log('🟢 Datos recibidos:', datos); 
+
+   const consulta = `
+    UPDATE citas
+    SET estatus = 1, motivoCancelacion = '${datos.motivoCancelacion}'
+    WHERE idcitas = ${datos.idcitas};
+`;
+
+    try {
+        await procesadorConsultas(consulta);
+        return res.status(200).send({ mensaje: "Datos actualizados correctamente" });
+    } catch (error) {
+        console.log('⚠️ Error:', error); 
+        return res.status(500).send({ error: error.message || 'Hubo un problema con la base de datos' });
+    }
+}
+);
+
+rutas.put('/actualizarCita', async (req, res) => {
+    console.log('🟢 Ruta /actualizarCita fue llamada');
+    const datos = req.body.datos;
+    console.log('🟢 Datos recibidos:', datos); 
+    const fecha = new Date(datos.fecha);
+    const fechaFormateada = fecha.toISOString().slice(0, 10);
+ const consulta = ` update citas set fecha='${fechaFormateada}'and motivo= '${datos.motivo}' where idcitas = ${datos.idcitas}; `;
+  try {
+        await procesadorConsultas(consulta);
+        return res.status(200).send({ mensaje: "Datos actualizados correctamente" });
+    } catch (error) {
+        console.log('⚠️ Error:', error); 
+        return res.status(500).send({ error: error.message || 'Hubo un problema con la base de datos' });
+    }
+    }
+);
+
 
 module.exports = rutas;

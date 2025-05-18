@@ -72,7 +72,57 @@ rutas.post('/login', async (req, res)  =>{
 
 
 })
+rutas.get('/citas/medico/:idmedico', async (req, res) => {
+    const idmedico = req.params.idmedico;
+    
+    try {
+        const consulta = `
+            SELECT 
+                c.idcita, 
+                CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre,
+                c.fecha, 
+                c.hora, 
+                c.estado
+            FROM cita c
+            JOIN paciente p ON c.idpaciente = p.idpaciente
+            WHERE c.idmedico = ${idmedico}
+            ORDER BY c.fecha, c.hora
+        `;
+        
+        const resultado = await procesadorConsultas(consulta);
+        const citas = resultado[0];
+        
+        return res.status(200).send(citas);
+    } catch (error) {
+        console.log('⚠️ Error:', error);
+        return res.status(500).send({ error: error.message || 'Error al obtener las citas' });
+    }
+});
 
-
+rutas.put('/citas/:idcita/estado', async (req, res) => {
+    const idcita = req.params.idcita;
+    const { estado } = req.body;
+    
+    if (!estado) {
+        return res.status(400).send({ mensaje: "El estado es requerido" });
+    }
+    
+    try {
+        const consulta = `
+            UPDATE cita 
+            SET estado = '${estado}'
+            WHERE idcita = ${idcita}
+        `;
+        
+        await procesadorConsultas(consulta);
+        return res.status(200).send({ success: true, mensaje: "Estado de la cita actualizado" });
+    } catch (error) {
+        console.log('⚠️ Error:', error);
+        return res.status(500).send({ error: error.message || 'Error al actualizar el estado de la cita' });
+    }
+});
 
 module.exports = rutas;
+
+
+
